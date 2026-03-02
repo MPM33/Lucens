@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --navy:    #001336;
+  --gold:    #FFBF1C;
+  --neutral: #F5F5F5;
+  --charcoal: #1A1A1A;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-montserrat), Montserrat, sans-serif;
+}
