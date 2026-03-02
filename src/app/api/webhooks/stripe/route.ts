@@ -17,9 +17,11 @@ import {
 import { updateUserPlan, downgradeToFree } from '@/lib/db/quotas'
 import type { PlanTier } from '@/lib/db/types'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-02-24.acacia',
-})
+function getStripe() {
+  const key = process.env.STRIPE_SECRET_KEY
+  if (!key) throw new Error('STRIPE_SECRET_KEY is not set')
+  return new Stripe(key, { apiVersion: '2025-02-24.acacia' })
+}
 
 // Mapping des price IDs Stripe vers les plans internes
 // À configurer via variables d'environnement en production
@@ -29,6 +31,7 @@ const PRICE_TO_PLAN: Record<string, PlanTier> = {
 }
 
 export async function POST(request: Request) {
+  const stripe = getStripe()
   const body = await request.text()
   const signature = request.headers.get('stripe-signature')
 
