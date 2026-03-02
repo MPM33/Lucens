@@ -75,7 +75,7 @@ export function StepCard({
           <CompositeInput
             subInputs={step.scoring.sub_inputs}
             value={answer.composite_values ?? {}}
-            onChange={(cv) => onChange({ ...answer, composite_values: cv })}
+            onChange={(cv) => onChange({ ...answer, composite_values: cv as StepAnswer['composite_values'] })}
           />
         )}
 
