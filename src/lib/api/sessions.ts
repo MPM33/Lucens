@@ -16,6 +16,7 @@ export async function saveStep(
   sessionId: string,
   body: {
     step_id: string
+    step_position: number
     scale_value?: number
     choice_id?: string
     composite_values?: Record<string, { scale_value?: number; choice_id?: string }>
