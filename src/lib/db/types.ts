@@ -93,7 +93,7 @@ export function sessionEventToStepAnswer(row: SessionEventRow): StepAnswer {
     step_id: row.step_id,
     scale_value: row.scale_value as StepAnswer['scale_value'] ?? undefined,
     choice_id: row.choice_id ?? undefined,
-    composite_values: row.composite_values ?? undefined,
+    composite_values: row.composite_values as StepAnswer['composite_values'] ?? undefined,
     free_text: row.free_text ?? undefined,
   }
 }

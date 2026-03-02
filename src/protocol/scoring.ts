@@ -382,17 +382,25 @@ export function validateProtocolConfig(config: ProtocolConfig): string[] {
 
   // Vérifier que les orientations couvrent [0, 100]
   const sorted = [...config.orientations].sort((a, b) => a.score_range[0] - b.score_range[0])
-  if (sorted[0].score_range[0] !== 0) {
-    errors.push(`La première orientation doit commencer à 0, pas à ${sorted[0].score_range[0]}`)
+  const first = sorted[0]
+  const last = sorted[sorted.length - 1]
+  if (!first || !last) {
+    errors.push('Le protocole doit avoir au moins une orientation')
+    return errors
   }
-  if (sorted[sorted.length - 1].score_range[1] !== 100) {
-    errors.push(`La dernière orientation doit finir à 100, pas à ${sorted[sorted.length - 1].score_range[1]}`)
+  if (first.score_range[0] !== 0) {
+    errors.push(`La première orientation doit commencer à 0, pas à ${first.score_range[0]}`)
+  }
+  if (last.score_range[1] !== 100) {
+    errors.push(`La dernière orientation doit finir à 100, pas à ${last.score_range[1]}`)
   }
   for (let i = 1; i < sorted.length; i++) {
-    if (sorted[i].score_range[0] !== sorted[i - 1].score_range[1] + 1) {
+    const curr = sorted[i]!
+    const prev = sorted[i - 1]!
+    if (curr.score_range[0] !== prev.score_range[1] + 1) {
       errors.push(
-        `Trou ou chevauchement entre ${sorted[i - 1].id} (${sorted[i - 1].score_range}) ` +
-        `et ${sorted[i].id} (${sorted[i].score_range})`,
+        `Trou ou chevauchement entre ${prev.id} (${prev.score_range}) ` +
+        `et ${curr.id} (${curr.score_range})`,
       )
     }
   }

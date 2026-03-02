@@ -71,6 +71,10 @@ Tes règles d'analyse :
 
 Format de réponse attendu : texte brut, en français, sans markdown, sans titre.`
 
+// Type étendu pour les blocs system avec prompt caching.
+// cache_control est supporté par l'API Anthropic mais absent des types SDK ^0.32.
+export type CacheableTextBlock = { type: 'text'; text: string; cache_control?: { type: 'ephemeral' } }
+
 export const ASSEMBLY_SYSTEM_PROMPT_STATIC = `Tu es le moteur de synthèse du Protocole RELATION.
 
 Tu reçois les analyses de 7 étapes d'une session de décision relationnelle, ainsi que les résultats du scoring algorithmique.

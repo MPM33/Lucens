@@ -14,7 +14,7 @@ import type { StepAnswer } from '@/protocol/types'
 import type { ProtocolStep, ProtocolConfig } from '@/protocol/types'
 import type { FullScoringResult } from '@/protocol/scoring'
 import type { StepInterpretation } from './types'
-import { getAnthropicClient, LLM_MODELS, MAX_TOKENS, STEP_SYSTEM_PROMPT_STATIC } from './client'
+import { getAnthropicClient, LLM_MODELS, MAX_TOKENS, STEP_SYSTEM_PROMPT_STATIC, type CacheableTextBlock } from './client'
 import { buildStepUserPrompt } from './prompts'
 
 /**
@@ -45,15 +45,13 @@ export async function interpretStep(
   const response = await anthropic.messages.create({
     model: LLM_MODELS.steps,
     max_tokens: MAX_TOKENS.step,
-    system: [
+    system: ([
       {
         type: 'text',
         text: STEP_SYSTEM_PROMPT_STATIC,
-        // Prompt caching : ce bloc identique dans toutes les requêtes d'étape
-        // est mis en cache après la première utilisation (décision 13A)
         cache_control: { type: 'ephemeral' },
-      },
-    ],
+      } satisfies CacheableTextBlock,
+    ] as CacheableTextBlock[]) as Parameters<typeof anthropic.messages.create>[0]['system'],
     messages: [
       {
         role: 'user',
@@ -69,7 +67,7 @@ export async function interpretStep(
     .trim()
 
   // Métadonnées pour monitoring des coûts
-  const cacheReadTokens = (response.usage as Record<string, number>)['cache_read_input_tokens'] ?? 0
+  const cacheReadTokens = (response.usage as unknown as Record<string, number>)['cache_read_input_tokens'] ?? 0
 
   return {
     step_id: step.id,

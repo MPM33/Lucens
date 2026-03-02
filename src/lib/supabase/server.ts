@@ -5,13 +5,15 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { createServerClient } from '@supabase/ssr'
+import { createClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
-import type { Database } from './database.types'
+
+type CookieItem = { name: string; value: string; options?: Record<string, unknown> }
 
 export async function createSupabaseServerClient() {
   const cookieStore = await cookies()
 
-  return createServerClient<Database>(
+  return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
@@ -19,9 +21,9 @@ export async function createSupabaseServerClient() {
         getAll() {
           return cookieStore.getAll()
         },
-        setAll(cookiesToSet) {
+        setAll(cookiesToSet: CookieItem[]) {
           cookiesToSet.forEach(({ name, value, options }) =>
-            cookieStore.set(name, value, options),
+            cookieStore.set(name, value, options as Parameters<typeof cookieStore.set>[2]),
           )
         },
       },
@@ -36,8 +38,7 @@ export async function createSupabaseServerClient() {
  * Ne jamais exposer SUPABASE_SERVICE_ROLE_KEY au client.
  */
 export function createSupabaseServiceClient() {
-  const { createClient } = require('@supabase/supabase-js')
-  return createClient<Database>(
+  return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
     {

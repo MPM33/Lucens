@@ -178,6 +178,13 @@ export type StepAnswer = {
 // Résultat de scoring
 // ─────────────────────────────────────────────────────────────────────────────
 
+// Drapeaux contextuels calculés sur l'étape 5 (maturité décisionnelle)
+export type TimingFlags = {
+  impulsive_risk: boolean      // urgence ressentie élevée (>= 4/5)
+  limited_influence: boolean   // fenêtre d'influence perçue faible (<= 2/5)
+  early_relationship: boolean  // relation de moins de 3 mois
+}
+
 // Distance ordinale entre l'intuition utilisatrice et la recommandation algo.
 // 0 = cohérence parfaite | 3 = opposition totale
 export type CoherenceGap = 0 | 1 | 2 | 3

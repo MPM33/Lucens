@@ -13,6 +13,7 @@ import {
   LLM_MODELS,
   MAX_TOKENS,
   ASSEMBLY_SYSTEM_PROMPT_STATIC,
+  type CacheableTextBlock,
 } from './client'
 import { buildAssemblyUserPrompt } from './prompts'
 
@@ -65,13 +66,13 @@ export async function* assembleReportStream(
   const stream = anthropic.messages.stream({
     model: LLM_MODELS.assembly,
     max_tokens: MAX_TOKENS.assembly,
-    system: [
+    system: ([
       {
         type: 'text',
         text: ASSEMBLY_SYSTEM_PROMPT_STATIC,
         cache_control: { type: 'ephemeral' },
-      },
-    ],
+      } satisfies CacheableTextBlock,
+    ] as CacheableTextBlock[]) as Parameters<typeof anthropic.messages.create>[0]['system'],
     messages: [
       {
         role: 'user',
@@ -119,13 +120,13 @@ export async function assembleReport(
   const response = await anthropic.messages.create({
     model: LLM_MODELS.assembly,
     max_tokens: MAX_TOKENS.assembly,
-    system: [
+    system: ([
       {
         type: 'text',
         text: ASSEMBLY_SYSTEM_PROMPT_STATIC,
         cache_control: { type: 'ephemeral' },
-      },
-    ],
+      } satisfies CacheableTextBlock,
+    ] as CacheableTextBlock[]) as Parameters<typeof anthropic.messages.create>[0]['system'],
     messages: [{ role: 'user', content: userPrompt }],
   })
 
