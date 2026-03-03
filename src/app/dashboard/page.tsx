@@ -190,7 +190,7 @@ function SessionRow({ session }: { session: SessionSummary }) {
         <p className="text-xs text-gray-400 font-body">{date}</p>
       </div>
       <div className="flex items-center gap-3">
-        {isComplete && session.reports?.final_score !== null && (
+        {isComplete && session.reports?.final_score != null && (
           <span className="text-sm font-heading font-bold text-navy tabular-nums">
             {session.reports!.final_score}/100
           </span>

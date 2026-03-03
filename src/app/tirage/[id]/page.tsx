@@ -18,6 +18,7 @@ export default async function TiragePage({ params }: Props) {
   const session = await getSession(supabase, sessionId, user.id).catch(() => null)
   if (!session) redirect('/dashboard')
   if (session.status === 'completed') redirect(`/rapport/${sessionId}`)
+  if (session.status !== 'in_progress') redirect('/dashboard')
 
   // Réponses déjà enregistrées (permet de reprendre une session)
   const answers = await getSessionAnswers(supabase, sessionId, user.id).catch(() => [])

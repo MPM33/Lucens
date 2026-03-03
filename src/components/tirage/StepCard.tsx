@@ -58,8 +58,6 @@ export function StepCard({
           <ScaleInput
             value={answer.scale_value}
             onChange={(v) => onChange({ ...answer, scale_value: v as ScaleValue })}
-            minLabel="Pas du tout"
-            maxLabel="Tout à fait"
           />
         )}
 
