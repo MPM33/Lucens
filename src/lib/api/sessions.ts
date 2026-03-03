@@ -17,10 +17,12 @@ export async function saveStep(
   body: {
     step_id: string
     step_position: number
-    scale_value?: number
-    choice_id?: string
-    composite_values?: Record<string, { scale_value?: number; choice_id?: string }>
-    free_text?: string
+    answer: {
+      scale_value?: number
+      choice_id?: string
+      composite_values?: Record<string, { scale_value?: number; choice_id?: string }>
+      free_text?: string
+    }
   },
 ): Promise<void> {
   const res = await fetch(`/api/sessions/${sessionId}/steps`, {

@@ -40,7 +40,7 @@ export function TirageFlow({ sessionId, initialAnswers = {} }: Props) {
     setIsSaving(true)
 
     try {
-      await saveStep(sessionId, { step_id: step.id, step_position: step.position, ...answer })
+      await saveStep(sessionId, { step_id: step.id, step_position: step.position, answer })
 
       if (currentIndex < steps.length - 1) {
         setCurrentIndex((i) => i + 1)
