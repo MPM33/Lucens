@@ -173,6 +173,7 @@ function SessionRow({ session }: { session: SessionSummary }) {
   const orientation = session.reports?.orientation
     ? ORIENTATION_LABELS[session.reports.orientation]
     : null
+  const finalScore = session.reports?.final_score ?? null
 
   return (
     <button
@@ -190,9 +191,9 @@ function SessionRow({ session }: { session: SessionSummary }) {
         <p className="text-xs text-gray-400 font-body">{date}</p>
       </div>
       <div className="flex items-center gap-3">
-        {isComplete && session.reports?.final_score != null && (
+        {isComplete && finalScore !== null && (
           <span className="text-sm font-heading font-bold text-navy tabular-nums">
-            {session.reports!.final_score}/100
+            {finalScore}/100
           </span>
         )}
         <span
